@@ -1,6 +1,6 @@
 import uuid
 from sqlalchemy import Column, String, Boolean, DateTime, Enum as SAEnum
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import UUID
 from core.database import Base
 from sqlalchemy.sql import func
 import enum
