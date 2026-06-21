@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+sqlalchemy
+asyncpg
+alembic
+passlib[bcrypt]
+PyJWT
+cryptography
+fastapi-cache2[redis]
+redis
+celery
+prometheus-fastapi-instrumentator
+pybreaker
