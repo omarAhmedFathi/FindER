@@ -7,13 +7,14 @@ from middleware.errors import global_exception_handler
 from middleware.logging import LoggingMiddleware
 from api.v1.router import api_router
 from fastapi.exceptions import RequestValidationError
-from prometheus_fastapi_instrumentator import Instrumentator
 import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title=settings.PROJECT_NAME, version=settings.VERSION)
+
+app.include_router(api_router, prefix=settings.API_V1_STR)
 
 # Middlewares (Optimized)
 setup_cors(app)
@@ -22,10 +23,9 @@ app.add_middleware(LoggingMiddleware)
 app.add_exception_handler(Exception, global_exception_handler)
 app.add_exception_handler(RequestValidationError, global_exception_handler)
 
-# Metrics
-Instrumentator().instrument(app).expose(app, endpoint="/metrics")
-
-app.include_router(api_router, prefix=settings.API_V1_STR)
+from prometheus_client import make_asgi_app
+from starlette.routing import Mount
+app.mount("/metrics", make_asgi_app())
 
 @app.on_event("startup")
 async def startup_event():
